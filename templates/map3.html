@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <title></title>
+<style type="text/css">
+  body{margin:0; padding:0;}
+  .bottom td {
+      text-align:center;
+      padding: 10px;
+  }
+</style>
+</head>
+<body>
+<div class="row" style="width: 100%; height: 100%">
+  <div class="col-md-6" style="padding-top: 10px; width: 50%; height: 100%;">
+      <div class="top" style="padding-left: 20px; width: 100%; height: 50%;">
+      <div class="panel panel-default">
+          <h3>类型选取 & oas地址</h3>
+          <div class="select" style="padding-left: 20px">
+          <form action="/" method="post" name="myform" onsubmit="return showmap();">
+              <table style="width: 100%;">
+                  <tr>
+                      <td><input type="checkbox" checked="checked" name="fc" value="1">地址分词</td>
+                      <td><input type="checkbox" checked="checked" name="yc" value="1">POI预测</td>
+                  </tr>
+                  <tr>
+                      <td><input type="checkbox" checked="checked" name="jgh" value="1">地址结构化</td>
+                      <td><input type="checkbox" checked="checked" name="jwd" value="1">离线经纬度查询</td>
+                  </tr>
+                  <tr>
+                      <td><input type="checkbox" checked="checked" name="bch" value="1">地址标准化</td>
+                      <td><input type="checkbox" checked="checked" name="gy" value="1">POI归一</td>
+                  </tr>
+                  <tr>
+                      <td><input type="checkbox" checked="checked" name="fl" value="1">poi分类</td>
+                  </tr>
+                  <tr>
+                      <td><input type="checkbox" name="zx" value="1">高德在线经纬度查询</td>
+                  </tr>
+                  <tr>
+                      <td><input type="checkbox" checked="checked" name="yb" value="1">邮政编码查询</td>
+                  </tr>
+                  <tr>
+                      <td colspan="2"><input type="text" name="poi" placeholder="POI" style="width: 70%; height: 35px; border:solid 1px blue;" value="{{ context.poiCenter }}"></td>
+                  </tr>
+                  <tr><td><p>上次查询地址：{{ context.poiCenter }}</p></td></tr>
+                  <tr>
+                    <td>
+                        <p>
+                          {% for message in get_flashed_messages() %}
+                           <div  style="color: red;" class="alert">{{ message }}</div>
+                          {% endfor %}
+                          <button type="submit" id="search" class="btn btn-success">查询</button>
+                          <button type="button" class="btn btn-warning">重置</button>
+                        </p>
+                    </td>
+                  </tr>
+              </table>
+              </form>
+          </div>
+          </div>
+      </div>
+      <div class="bottom" style="padding-left: 20px;width: 100%; height: 50%;">
+        <div class="panel panel-default">
+          <table border="1">
+            {% if context.keys()|length > 1 %}
+            {% for k, v in context.items() %}
+            <tr>
+              <td>{{ k }}</td>
+              <td>{{ v }}</td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+          </table>
+        </div>
+      </div>
+  </div>
+  <div class="col-md-6" id="map" style="width: 50%; height: 100%;">
+  <div class="bottom" style="padding-right: 20px; padding-top: 10px;width: 100%; height: 100%;">
+  <!-- 地图窗口 -->
+  <iframe id="mapbox" src="/marker/{{ context.wgs84Location }}" style="width: 100%;height: 615px;" scrolling="no" frameborder="0"></iframe>
+  </div>
+  </div>
+</div>
+</body>
+<script type="text/javascript">
+   
+</script>
+
+</html>

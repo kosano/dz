@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Display a map</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='/static/js/mapbox-gl.js'></script>
+    <link href='/static/css/mapbox-gl.css' rel='stylesheet' />
+    <script src='/static/js/mapbox-gl-language.js'></script>
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+
+<div id='map' ></div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1Ijoia29zYW5vIiwiYSI6ImNrM3d1MzFjZTBxcjQzbG1xeGc0NWJtMnEifQ.dB6dsS_jZKxqvyHGFHlQJQ';
+var map = new mapboxgl.Map({
+    container: 'map', // container id
+    style:{
+        "version": 8,
+        "name": "Mapbox Streets",
+        // 这里的 http://localhost:8080 需要更改为自己的域名加端口
+        "sprite": "http://localhost:8080/static/mapbox_build/sprite/sprite",
+        // 这里的 http://localhost:8080 需要更改为自己的域名加端口
+        "glyphs": "http://localhost:8080/static/mapbox_build/fonts/{fontstack}/{range}.pbf",
+         "sources": {
+             "osm-tiles": {
+                 "type": "raster",
+                 "tiles": [
+                    // 这里的 http://localhost:8080 需要更改为自己的域名加端口
+                   "http://localhost:8080/static/map/{z}/{x}/{y}.png"
+                  ],
+                 "tileSize": 256
+             }
+        },
+      "layers":[{
+          "id": "123",
+           "type": "raster",
+           "source": "osm-tiles",
+           "source-layer": "osmtiles"
+      }]
+    },
+    center: [{{ location.lat }}, {{ location.lon }}], // starting position [lng, lat]
+    zoom: 9 // starting zoom
+});
+
+
+// var map = new mapboxgl.Map({
+// container: 'map',
+// style: 'mapbox://styles/kosano/ck4mdn9pq060q1coa75t434sg',
+// center: [120.20000, 30.26667],
+// zoom: 9
+// });
+mapboxgl.setRTLTextPlugin('/static/js/mapbox-gl-rtl-text.js');
+map.addControl(new MapboxLanguage({
+    defaultLanguage: 'zh'
+}));
+var marker = new mapboxgl.Marker({
+      draggable: true
+}).setLngLat([{{ location.lat }}, {{ location.lon }}]).addTo(map);
+
+function onDragEnd() {
+      var lngLat = marker.getLngLat();
+      coordinates.style.display = "block";
+      coordinates.innerHTML =
+        "Longitude: " + lngLat.lng + "<br />Latitude: " + lngLat.lat;
+    }
+ 
+marker.on("dragstart", onDragEnd);//鼠标移动结束
+marker.on("drag", onDragEnd);//鼠标移动中
+marker.on("dragend", onDragEnd);
+</script>
+</body>
+</html>
